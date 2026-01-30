@@ -1,0 +1,70 @@
+package com.yann.collaborative_task_manager_backend.controler;
+
+import com.yann.collaborative_task_manager_backend.Exception.InvalidJwtException;
+import com.yann.collaborative_task_manager_backend.dto.AuthResponseDTO;
+import com.yann.collaborative_task_manager_backend.dto.LoginDTO;
+import com.yann.collaborative_task_manager_backend.dto.RefreshTokenDTO;
+import com.yann.collaborative_task_manager_backend.dto.RegisterDTO;
+import com.yann.collaborative_task_manager_backend.service.AuthService;
+import com.yann.collaborative_task_manager_backend.service.BlacklistService;
+import com.yann.collaborative_task_manager_backend.service.JwtService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    private final AuthService authService;
+    private final JwtService jwtService;
+    private final BlacklistService blacklistService;
+
+    public AuthController(AuthService authService, JwtService jwtService, BlacklistService blacklistService) {
+        this.authService = authService;
+        this.jwtService = jwtService;
+        this.blacklistService = blacklistService;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterDTO dto) {
+        authService.register(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDTO> login(
+            @Valid @RequestBody LoginDTO dto) {
+
+        return ResponseEntity.ok(authService.login(dto));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<String> refresh(
+            @Valid @RequestBody RefreshTokenDTO dto) {
+
+        String newAccessToken = authService.refresh(dto);
+        return ResponseEntity.ok(newAccessToken);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new InvalidJwtException("Authorization header missing or malformed");
+        }
+
+        String token = authHeader.substring(7);
+
+        try {
+            Instant expiry = jwtService.extractExpiration(token).toInstant();
+            blacklistService.blacklist(token, expiry);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            throw new InvalidJwtException("Invalid JWT token");
+        }
+    }
+
+}
