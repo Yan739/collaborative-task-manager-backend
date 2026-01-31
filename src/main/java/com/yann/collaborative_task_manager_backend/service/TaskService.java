@@ -1,5 +1,6 @@
 package com.yann.collaborative_task_manager_backend.service;
 
+import com.yann.collaborative_task_manager_backend.dto.TaskUpdateDTO;
 import com.yann.collaborative_task_manager_backend.dto.taskDTO.TaskCreateDTO;
 import com.yann.collaborative_task_manager_backend.dto.taskDTO.TaskDTO;
 import com.yann.collaborative_task_manager_backend.entity.taskEntity.Task;
@@ -54,6 +55,26 @@ public class TaskService {
         return taskRepository.findById(id)
                 .map(taskMapper::toDto)
                 .orElseThrow(() -> new RuntimeException("Tâche non trouvée avec l'ID : " + id));
+    }
+
+    @Transactional
+    public TaskDTO updateTask(Long id, TaskUpdateDTO dto) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tâche introuvable"));
+
+        if (dto.getTitle() != null) task.setTitle(dto.getTitle());
+        if (dto.getDescription() != null) task.setDescription(dto.getDescription());
+        if (dto.getStatus() != null) task.setStatus(dto.getStatus());
+        if (dto.getPriority() != null) task.setPriority(dto.getPriority());
+        if (dto.getDueDate() != null) task.setDueDate(dto.getDueDate());
+
+        if (dto.getAssignedToId() != null) {
+            User newAssignee = userRepository.findById(dto.getAssignedToId())
+                    .orElseThrow(() -> new UserNotFoundException(dto.getAssignedToId()));
+            task.setAssignedTo(newAssignee);
+        }
+
+        return taskMapper.toDto(taskRepository.save(task));
     }
 
     @Transactional
