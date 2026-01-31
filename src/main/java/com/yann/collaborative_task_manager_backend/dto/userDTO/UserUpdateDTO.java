@@ -1,4 +1,4 @@
-package com.yann.collaborative_task_manager_backend.dto;
+package com.yann.collaborative_task_manager_backend.dto.userDTO;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

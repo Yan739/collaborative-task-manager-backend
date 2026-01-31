@@ -2,11 +2,11 @@ package com.yann.collaborative_task_manager_backend.service;
 
 import com.yann.collaborative_task_manager_backend.Exception.UserNotFoundException;
 import com.yann.collaborative_task_manager_backend.Mapper.UserMapper;
-import com.yann.collaborative_task_manager_backend.dto.UserCreateDTO;
-import com.yann.collaborative_task_manager_backend.dto.UserDTO;
-import com.yann.collaborative_task_manager_backend.dto.UserUpdateDTO;
-import com.yann.collaborative_task_manager_backend.entity.Role;
-import com.yann.collaborative_task_manager_backend.entity.User;
+import com.yann.collaborative_task_manager_backend.dto.userDTO.UserCreateDTO;
+import com.yann.collaborative_task_manager_backend.dto.userDTO.UserDTO;
+import com.yann.collaborative_task_manager_backend.dto.userDTO.UserUpdateDTO;
+import com.yann.collaborative_task_manager_backend.entity.userEntity.Role;
+import com.yann.collaborative_task_manager_backend.entity.userEntity.User;
 import com.yann.collaborative_task_manager_backend.repository.UserRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.security.crypto.password.PasswordEncoder;

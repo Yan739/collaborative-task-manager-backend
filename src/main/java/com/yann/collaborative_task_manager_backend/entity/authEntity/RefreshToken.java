@@ -1,0 +1,25 @@
+package com.yann.collaborative_task_manager_backend.entity.authEntity;
+
+import com.yann.collaborative_task_manager_backend.entity.userEntity.User;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.Instant;
+
+@Entity
+@Getter
+@Setter
+public class RefreshToken {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String token;
+
+    @OneToOne
+    private User user;
+
+    private Instant expiryDate;
+}

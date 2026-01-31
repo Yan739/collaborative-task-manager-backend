@@ -1,7 +1,7 @@
 package com.yann.collaborative_task_manager_backend.service;
 
-import com.yann.collaborative_task_manager_backend.entity.RefreshToken;
-import com.yann.collaborative_task_manager_backend.entity.User;
+import com.yann.collaborative_task_manager_backend.entity.authEntity.RefreshToken;
+import com.yann.collaborative_task_manager_backend.entity.userEntity.User;
 import com.yann.collaborative_task_manager_backend.repository.RefreshTokenRepository;
 import com.yann.collaborative_task_manager_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;

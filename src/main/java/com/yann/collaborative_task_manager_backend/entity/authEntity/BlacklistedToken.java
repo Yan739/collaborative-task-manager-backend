@@ -1,15 +1,14 @@
-package com.yann.collaborative_task_manager_backend.entity;
+package com.yann.collaborative_task_manager_backend.entity.authEntity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.Instant;
 
+@Data
 @Entity
-@Getter
-@Setter
-public class RefreshToken {
+public class BlacklistedToken {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,8 +16,6 @@ public class RefreshToken {
     @Column(unique = true, nullable = false)
     private String token;
 
-    @OneToOne
-    private User user;
-
     private Instant expiryDate;
 }
+

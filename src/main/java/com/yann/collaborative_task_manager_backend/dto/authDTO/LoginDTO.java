@@ -1,4 +1,4 @@
-package com.yann.collaborative_task_manager_backend.dto;
+package com.yann.collaborative_task_manager_backend.dto.authDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

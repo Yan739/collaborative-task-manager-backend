@@ -1,6 +1,6 @@
 package com.yann.collaborative_task_manager_backend.service;
 
-import com.yann.collaborative_task_manager_backend.entity.User;
+import com.yann.collaborative_task_manager_backend.entity.userEntity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

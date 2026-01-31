@@ -1,9 +1,12 @@
-package com.yann.collaborative_task_manager_backend.entity;
+package com.yann.collaborative_task_manager_backend.entity.userEntity;
 
+import com.yann.collaborative_task_manager_backend.entity.taskEntity.Task;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,4 +37,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Task> createdTasks;
 }

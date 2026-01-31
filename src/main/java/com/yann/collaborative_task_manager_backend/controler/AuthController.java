@@ -1,10 +1,10 @@
 package com.yann.collaborative_task_manager_backend.controler;
 
 import com.yann.collaborative_task_manager_backend.Exception.InvalidJwtException;
-import com.yann.collaborative_task_manager_backend.dto.AuthResponseDTO;
-import com.yann.collaborative_task_manager_backend.dto.LoginDTO;
-import com.yann.collaborative_task_manager_backend.dto.RefreshTokenDTO;
-import com.yann.collaborative_task_manager_backend.dto.RegisterDTO;
+import com.yann.collaborative_task_manager_backend.dto.authDTO.AuthResponseDTO;
+import com.yann.collaborative_task_manager_backend.dto.authDTO.LoginDTO;
+import com.yann.collaborative_task_manager_backend.dto.authDTO.RefreshTokenDTO;
+import com.yann.collaborative_task_manager_backend.dto.authDTO.RegisterDTO;
 import com.yann.collaborative_task_manager_backend.service.AuthService;
 import com.yann.collaborative_task_manager_backend.service.BlacklistService;
 import com.yann.collaborative_task_manager_backend.service.JwtService;
