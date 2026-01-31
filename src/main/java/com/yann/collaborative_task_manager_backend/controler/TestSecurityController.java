@@ -6,20 +6,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/test")
 public class TestSecurityController {
 
-    public TestSecurityController() {
-    }
-
     @GetMapping("/secured")
+
     public String secured() {
-        return "ACCESS OK";
+        return "ACCESS OK : Vous êtes bien authentifié.";
     }
 
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public String adminOnly() {
-        return "ADMIN OK";
+        return "ADMIN OK : Vous avez bien le rôle administrateur.";
     }
 }
