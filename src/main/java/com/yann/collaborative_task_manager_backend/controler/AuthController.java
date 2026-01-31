@@ -1,6 +1,6 @@
 package com.yann.collaborative_task_manager_backend.controler;
 
-import com.yann.collaborative_task_manager_backend.Exception.InvalidJwtException;
+import com.yann.collaborative_task_manager_backend.exception.InvalidJwtException;
 import com.yann.collaborative_task_manager_backend.dto.authDTO.AuthResponseDTO;
 import com.yann.collaborative_task_manager_backend.dto.authDTO.LoginDTO;
 import com.yann.collaborative_task_manager_backend.dto.authDTO.RefreshTokenDTO;
@@ -9,25 +9,22 @@ import com.yann.collaborative_task_manager_backend.service.AuthService;
 import com.yann.collaborative_task_manager_backend.service.BlacklistService;
 import com.yann.collaborative_task_manager_backend.service.JwtService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
     private final BlacklistService blacklistService;
-
-    public AuthController(AuthService authService, JwtService jwtService, BlacklistService blacklistService) {
-        this.authService = authService;
-        this.jwtService = jwtService;
-        this.blacklistService = blacklistService;
-    }
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@Valid @RequestBody RegisterDTO dto) {
@@ -36,18 +33,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(
-            @Valid @RequestBody LoginDTO dto) {
-
+    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginDTO dto) {
         return ResponseEntity.ok(authService.login(dto));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refresh(
-            @Valid @RequestBody RefreshTokenDTO dto) {
-
+    public ResponseEntity<Map<String, String>> refresh(@Valid @RequestBody RefreshTokenDTO dto) {
         String newAccessToken = authService.refresh(dto);
-        return ResponseEntity.ok(newAccessToken);
+
+        return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
 
     @PostMapping("/logout")
@@ -61,10 +55,9 @@ public class AuthController {
         try {
             Instant expiry = jwtService.extractExpiration(token).toInstant();
             blacklistService.blacklist(token, expiry);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             throw new InvalidJwtException("Invalid JWT token");
         }
     }
-
 }

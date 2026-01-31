@@ -1,4 +1,4 @@
-package com.yann.collaborative_task_manager_backend.Exception;
+package com.yann.collaborative_task_manager_backend.exception;
 
 import java.time.LocalDateTime;
 

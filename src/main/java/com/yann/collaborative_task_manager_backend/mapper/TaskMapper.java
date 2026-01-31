@@ -1,4 +1,4 @@
-package com.yann.collaborative_task_manager_backend.Mapper;
+package com.yann.collaborative_task_manager_backend.mapper;
 
 import com.yann.collaborative_task_manager_backend.dto.taskDTO.TaskCreateDTO;
 import com.yann.collaborative_task_manager_backend.dto.taskDTO.TaskDTO;

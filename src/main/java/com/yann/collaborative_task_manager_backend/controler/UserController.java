@@ -1,10 +1,11 @@
 package com.yann.collaborative_task_manager_backend.controler;
 
-import com.yann.collaborative_task_manager_backend.dto.userDTO.UserCreateDTO;
+import com.yann.collaborative_task_manager_backend.dto.UserCreateDTO;
 import com.yann.collaborative_task_manager_backend.dto.userDTO.UserDTO;
 import com.yann.collaborative_task_manager_backend.dto.userDTO.UserUpdateDTO;
 import com.yann.collaborative_task_manager_backend.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,42 +13,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class UserController {
 
-    private final UserService service;
-
-    public UserController(UserService service) {
-        this.service = service;
-    }
+    private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserCreateDTO dto) {
-        UserDTO createdUser = service.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getUserById(id));
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserCreateDTO dto) {
+        return new ResponseEntity<>(userService.save(dto), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(
-            @PathVariable Long id,
-            @Valid @RequestBody UserUpdateDTO dto) {
-
-        return ResponseEntity.ok(service.update(id, dto));
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto) {
+        return ResponseEntity.ok(userService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

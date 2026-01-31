@@ -1,4 +1,4 @@
-package com.yann.collaborative_task_manager_backend.Exception;
+package com.yann.collaborative_task_manager_backend.exception;
 
 import jakarta.annotation.Nonnull;
 import org.springframework.http.HttpStatus;

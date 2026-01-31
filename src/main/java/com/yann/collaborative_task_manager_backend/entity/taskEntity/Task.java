@@ -1,8 +1,8 @@
 package com.yann.collaborative_task_manager_backend.entity.taskEntity;
 
+import com.yann.collaborative_task_manager_backend.entity.userEntity.User;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.apache.catalina.User;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
@@ -36,12 +36,10 @@ public class Task {
     private LocalDateTime createdAt;
 
 
-    // La personne qui a créé la tâche
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
-    // La personne à qui la tâche est assignée
     @ManyToOne
     @JoinColumn(name = "assignee_id")
     private User assignedTo;
