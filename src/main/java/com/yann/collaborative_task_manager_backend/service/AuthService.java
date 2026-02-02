@@ -31,7 +31,7 @@ public class AuthService {
     public void register(RegisterDTO dto) {
 
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("Email déjà utilisé");
+            throw new RuntimeException("Cet email est déjà utilisé");
         }
 
         User user = userMapper.toEntity(dto);

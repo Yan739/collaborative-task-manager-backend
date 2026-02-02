@@ -1,4 +1,4 @@
-package com.yann.collaborative_task_manager_backend.dto;
+package com.yann.collaborative_task_manager_backend.dto.userDTO;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +16,7 @@ import lombok.Setter;
 public class UserCreateDTO {
 
     @NotBlank(message = "Le nom d'utilisateur est obligatoire")
-    private String userName; // minuscule ici
+    private String userName;
 
     @NotBlank(message = "L'email est obligatoire")
     @Email(message = "L'email doit être valide")

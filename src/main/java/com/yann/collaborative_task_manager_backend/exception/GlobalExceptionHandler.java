@@ -16,7 +16,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private ResponseEntity<ApiError> buildResponse(HttpStatus status, String message, Object details) {
+    @Nonnull
+    private ResponseEntity<ApiError> buildResponse(@Nonnull HttpStatus status, String message, Object details) {
         ApiError error = new ApiError(
                 status.value(),
                 message,
@@ -37,7 +38,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidJwtException.class)
-    public ResponseEntity<ApiError> handleInvalidJwt(InvalidJwtException e) {
+    public ResponseEntity<ApiError> handleInvalidJwt(@Nonnull InvalidJwtException e) {
         return buildResponse(HttpStatus.UNAUTHORIZED, e.getMessage(), null);
     }
 
@@ -56,7 +57,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleGeneric(Exception e) {
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur inattendue est survenue", null);
+    public ResponseEntity<ApiError> handleGeneric(@Nonnull Exception e) {
+        e.printStackTrace();
+        return buildResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                e.getMessage(),
+                null
+        );
     }
 }

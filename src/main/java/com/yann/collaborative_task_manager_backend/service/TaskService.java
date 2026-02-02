@@ -1,8 +1,8 @@
 package com.yann.collaborative_task_manager_backend.service;
 
-import com.yann.collaborative_task_manager_backend.dto.TaskUpdateDTO;
 import com.yann.collaborative_task_manager_backend.dto.taskDTO.TaskCreateDTO;
 import com.yann.collaborative_task_manager_backend.dto.taskDTO.TaskDTO;
+import com.yann.collaborative_task_manager_backend.dto.taskDTO.TaskUpdateDTO;
 import com.yann.collaborative_task_manager_backend.entity.taskEntity.Task;
 import com.yann.collaborative_task_manager_backend.entity.userEntity.User;
 import com.yann.collaborative_task_manager_backend.exception.UserNotFoundException;

@@ -5,6 +5,7 @@ import com.yann.collaborative_task_manager_backend.entity.userEntity.User;
 import com.yann.collaborative_task_manager_backend.repository.RefreshTokenRepository;
 import com.yann.collaborative_task_manager_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -23,20 +24,25 @@ public class RefreshTokenService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public RefreshToken create(User user) {
 
-        repository.deleteByUser(user);
+        User managedUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        repository.findByUser(managedUser)
+                .ifPresent(repository::delete);
 
         RefreshToken token = new RefreshToken();
-        token.setUser(user);
+        token.setUser(managedUser);
         token.setToken(UUID.randomUUID().toString());
         token.setExpiryDate(Instant.now().plus(7, ChronoUnit.DAYS));
 
         return repository.save(token);
     }
 
+    @Transactional(readOnly = true)
     public RefreshToken verify(String token) {
-
         RefreshToken refreshToken = repository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Refresh token invalide"));
 

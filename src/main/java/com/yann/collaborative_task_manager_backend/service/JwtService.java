@@ -33,8 +33,12 @@ public class JwtService {
                 .compact();
     }
 
-    public String extractEmail(String token) {
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public String extractEmail(String token) {
+        return extractUsername(token);
     }
 
     public String extractRole(String token) {
@@ -50,8 +54,13 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
+    public boolean isTokenValid(String token, User user) {
+        final String username = extractUsername(token);
+        return (username.equals(user.getEmail())) && !isTokenExpired(token);
+    }
+
     public boolean isTokenValid(String token, String email) {
-        final String username = extractEmail(token);
+        final String username = extractUsername(token);
         return (username.equals(email)) && !isTokenExpired(token);
     }
 

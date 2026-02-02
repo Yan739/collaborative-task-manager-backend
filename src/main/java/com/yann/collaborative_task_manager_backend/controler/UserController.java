@@ -1,6 +1,6 @@
 package com.yann.collaborative_task_manager_backend.controler;
 
-import com.yann.collaborative_task_manager_backend.dto.UserCreateDTO;
+import com.yann.collaborative_task_manager_backend.dto.userDTO.UserCreateDTO;
 import com.yann.collaborative_task_manager_backend.dto.userDTO.UserDTO;
 import com.yann.collaborative_task_manager_backend.dto.userDTO.UserUpdateDTO;
 import com.yann.collaborative_task_manager_backend.service.UserService;

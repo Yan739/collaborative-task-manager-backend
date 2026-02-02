@@ -1,7 +1,10 @@
 package com.yann.collaborative_task_manager_backend.config;
 
+import com.yann.collaborative_task_manager_backend.entity.userEntity.User;
+import com.yann.collaborative_task_manager_backend.repository.UserRepository;
 import com.yann.collaborative_task_manager_backend.service.BlacklistService;
 import com.yann.collaborative_task_manager_backend.service.JwtService;
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,50 +27,38 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final BlacklistService blacklistService;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
+            @Nonnull HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
     ) throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
-        final String token;
-        final String email;
+        String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        token = authHeader.substring(7);
+        String jwt = authHeader.substring(7);
+        String userEmail = jwtService.extractUsername(jwt);
 
-        try {
-            email = jwtService.extractEmail(token);
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            User user = userRepository.findByEmail(userEmail).orElse(null);
 
-                if (jwtService.isTokenValid(token, email) && !blacklistService.isBlacklisted(token)) {
-                    String role = jwtService.extractRole(token);
-
-                    SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
-
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            email,
-                            null,
-                            Collections.singletonList(authority)
-                    );
-
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
+            if (user != null && jwtService.isTokenValid(jwt, user)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        user,
+                        null,
+                        List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
+                );
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
         }
 
         filterChain.doFilter(request, response);

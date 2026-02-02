@@ -1,42 +1,53 @@
 package com.yann.collaborative_task_manager_backend.entity.userEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yann.collaborative_task_manager_backend.entity.taskEntity.Task;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@ToString(exclude = "password")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString(exclude = {"password", "createdTasks"})
+@EqualsAndHashCode(exclude = {"createdTasks"})
 @Table(name = "`users`")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String userName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String createdAt;
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private boolean enabled;
+    @Builder.Default
+    private Boolean enabled = true;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    private List<Task> createdTasks;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @Builder.Default
+    private List<Task> createdTasks = new ArrayList<>();
 }

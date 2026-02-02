@@ -1,10 +1,8 @@
 package com.yann.collaborative_task_manager_backend.controler;
 
-import com.yann.collaborative_task_manager_backend.dto.TaskUpdateDTO;
 import com.yann.collaborative_task_manager_backend.dto.taskDTO.TaskCreateDTO;
 import com.yann.collaborative_task_manager_backend.dto.taskDTO.TaskDTO;
-import com.yann.collaborative_task_manager_backend.dto.userDTO.UserDTO;
-import com.yann.collaborative_task_manager_backend.dto.userDTO.UserUpdateDTO;
+import com.yann.collaborative_task_manager_backend.dto.taskDTO.TaskUpdateDTO;
 import com.yann.collaborative_task_manager_backend.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

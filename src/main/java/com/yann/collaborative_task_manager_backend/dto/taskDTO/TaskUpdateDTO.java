@@ -1,4 +1,4 @@
-package com.yann.collaborative_task_manager_backend.dto;
+package com.yann.collaborative_task_manager_backend.dto.taskDTO;
 
 import com.yann.collaborative_task_manager_backend.entity.taskEntity.Priority;
 import com.yann.collaborative_task_manager_backend.entity.taskEntity.Status;

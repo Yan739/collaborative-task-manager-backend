@@ -7,12 +7,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskCreateDTO {
@@ -24,8 +26,10 @@ public class TaskCreateDTO {
     @NotBlank(message = "La description est obligatoire")
     private String description;
 
+    @Builder.Default
     private Status status = Status.TO_DO;
 
+    @Builder.Default
     private Priority priority = Priority.MEDIUM;
 
     @NotNull(message = "La date d'échéance est obligatoire")

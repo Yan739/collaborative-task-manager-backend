@@ -10,11 +10,11 @@ import lombok.Data;
 public class RegisterDTO {
 
     @NotBlank
-    private String name;
+    private String userName;
 
     @Email
     @NotBlank
-    private String Email;
+    private String email;
 
     @NotBlank
     @Size(min = 8)
