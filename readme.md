@@ -8,7 +8,6 @@
 ![Build](https://img.shields.io/badge/Build-Maven-red?logo=apachemaven&logoColor=white)
 ![Code Style](https://img.shields.io/badge/Code%20Style-MapStruct%2FDTO-lightgrey)
 ![JWT](https://img.shields.io/badge/JWT-Security-orange)
-![License](https://img.shields.io/badge/License-Projet%20Personnel-lightgrey)
 
 </div>
 
@@ -16,38 +15,38 @@
 
 ## Description
 
-API REST complète pour la gestion de tâches collaborative. Construit avec **Spring Boot 3.4**, elle met en œuvre une architecture propre et modulaire avec une sécurité basée sur **JWT**, un mapping automatisé via **MapStruct** et des tests unitaires **JUnit 5 / Mockito**.
+Complete REST API for collaborative task management. Built with **Spring Boot 3.4**, it implements a clean and modular architecture with **JWT-based security**, automated mapping via **MapStruct**, and unit testing with **JUnit 5 / Mockito**.
 
 ---
 
-## Fonctionnalités
+## Features
 
-- **Authentification & Sécurité**
-    - Inscription avec validation d'email unique
-    - Connexion avec génération de couple Access Token & Refresh Token
-    - Rafraîchissement de session via Refresh Token
-    - Hachage des mots de passe avec BCrypt
-- **Gestion des Tâches (CRUD)**
-    - Création, lecture, mise à jour, suppression
-    - Assignation de tâches entre utilisateurs
-    - Suivi des statuts (`TO_DO`, `IN_PROGRESS`, `DONE`) et priorités (`LOW`, `MEDIUM`, `HIGH`, `URGENT`)
-- **Architecture & Qualité**
-    - Mapping automatisé via MapStruct
-    - Validation des données côté serveur (Jakarta Validation)
-    - Gestion centralisée des exceptions via `@RestControllerAdvice`
-    - Tests unitaires avec Mockito
+- **Authentication & Security**
+  - Registration with unique email validation
+  - Login with Access Token & Refresh Token generation
+  - Session refresh via Refresh Token
+  - BCrypt password hashing
+- **Task Management (CRUD)**
+  - Create, Read, Update, Delete
+  - Task assignment between users
+  - Status tracking (`TO_DO`, `IN_PROGRESS`, `DONE`) and priorities (`LOW`, `MEDIUM`, `HIGH`, `URGENT`)
+- **Architecture & Quality**
+  - Automated mapping via MapStruct
+  - Server-side data validation (Jakarta Validation)
+  - Centralized exception handling via `@RestControllerAdvice`
+  - Unit testing with Mockito
 
 ---
 
 ## Technologies
 
-| Technologie | Version |
+| Technology | Version |
 |---|---|
 | Java | 21 |
 | Spring Boot | 3.4.2 |
 | Spring Data JPA | - |
 | Spring Security | - |
-| H2 Database | Développement & Tests |
+| H2 Database | Development & Testing |
 | MapStruct | 1.5.5 |
 | Lombok | - |
 | JJWT | - |
@@ -55,13 +54,13 @@ API REST complète pour la gestion de tâches collaborative. Construit avec **Sp
 
 ---
 
-## Structure du Projet
+## Project Structure
 ```
 com.yann.collaborative_task_manager_backend
 │
-├── controler/          → Points d'entrée REST (Auth, Task, User)
-├── service/            → Logique métier, JWT, Sécurité, Gestion des jetons
-├── repository/         → Abstraction de la base de données (JPA)
+├── controler/          → REST entry points (Auth, Task, User)
+├── service/            → Business logic, JWT, Security, Token management
+├── repository/         → Database abstraction (JPA)
 ├── entity/
 │   ├── userEntity/     → User, Role
 │   ├── taskEntity/     → Task, Status, Priority
@@ -70,66 +69,66 @@ com.yann.collaborative_task_manager_backend
 │   ├── authDTO/        → RegisterDTO, LoginDTO, AuthResponseDTO, RefreshTokenDTO
 │   ├── taskDTO/        → TaskCreateDTO, TaskDTO
 │   └── userDTO/        → UserDTO, UserUpdateDTO
-├── mapper/             → Interfaces MapStruct (TaskMapper, UserMapper)
+├── mapper/             → MapStruct interfaces (TaskMapper, UserMapper)
 ├── config/             → SecurityConfig, JwtAuthenticationFilter
-└── exception/          → Gestion centralisée des exceptions
+└── exception/          → Centralized exception handling
 ```
 
 ---
 
-## Flux de Sécurité (JWT)
+## Security Flow (JWT)
 ```
-Client                          Serveur
+Client                          Server
   │                                │
-  │──── POST /api/auth/register ──>│  Vérifie email unique, encode password
+  │──── POST /api/auth/register ──>│  Verify unique email, encode password
   │<─── 200 OK ────────────────────│
   │                                │
-  │──── POST /api/auth/login ─────>│  Valide credentials via AuthenticationManager
+  │──── POST /api/auth/login ─────>│  Validate credentials via AuthenticationManager
   │<─── { accessToken, refreshToken }
   │                                │
   │──── GET /api/tasks ───────────>│  Header: Authorization: Bearer <accessToken>
-  │<─── 200 OK + données ──────────│
+  │<─── 200 OK + data ─────────────│
   │                                │
-  │──── POST /api/auth/refresh ───>│  Envoie refreshToken
-  │<─── { nouveau accessToken } ───│
+  │──── POST /api/auth/refresh ───>│  Send refreshToken
+  │<─── { new accessToken } ───────│
 ```
 
 ---
 
 ## Endpoints
 
-### Authentification
+### Authentication
 
-| Méthode | Endpoint | Description | Auth requise |
+| Method | Endpoint | Description | Auth Required |
 |---|---|---|---|
-| POST | `/api/auth/register` | Inscription | Non |
-| POST | `/api/auth/login` | Connexion | Non |
-| POST | `/api/auth/refresh` | Rafraîchir le token | Non |
+| POST | `/api/auth/register` | Register | No |
+| POST | `/api/auth/login` | Login | No |
+| POST | `/api/auth/refresh` | Refresh token | No |
 
-### Tâches
+### Tasks
 
-| Méthode | Endpoint | Description | Auth requise |
+| Method | Endpoint | Description | Auth Required |
 |---|---|---|---|
-| POST | `/api/tasks` | Créer une tâche | Oui |
-| GET | `/api/tasks` | Toutes les tâches | Oui |
-| GET | `/api/tasks/{id}` | Tâche par ID | Oui |
-| PUT | `/api/tasks/{id}` | Mettre à jour une tâche | Oui |
-| DELETE | `/api/tasks/{id}` | Supprimer une tâche | Oui |
+| POST | `/api/tasks` | Create a task | Yes |
+| GET | `/api/tasks` | All tasks | Yes |
+| GET | `/api/tasks/{id}` | Task by ID | Yes |
+| PUT | `/api/tasks/{id}` | Update a task | Yes |
+| DELETE | `/api/tasks/{id}` | Delete a task | Yes |
 
-### Utilisateurs
+### Users
 
-| Méthode | Endpoint | Description | Auth requise |
+| Method | Endpoint | Description | Auth Required |
 |---|---|---|---|
-| GET | `/api/users` | Liste des utilisateurs | ADMIN |
-| GET | `/api/users/{id}` | Utilisateur par ID | ADMIN |
-| PUT | `/api/users/{id}` | Mettre à jour un utilisateur | ADMIN |
-| DELETE | `/api/users/{id}` | Supprimer un utilisateur | ADMIN |
+| GET | `/api/users` | List all users | ADMIN |
+| GET | `/api/users/{id}` | User by ID | ADMIN |
+| PUT | `/api/users/{id}` | Update a user | ADMIN |
+| DELETE | `/api/users/{id}` | Delete a user | ADMIN |
 
 ---
 
-## Exemples
+## Examples
 
-### Inscription
+### Register
 ```http
 POST /api/auth/register
 Content-Type: application/json
@@ -137,23 +136,23 @@ Content-Type: application/json
 {
   "userName": "Yann",
   "email": "yann@example.com",
-  "password": "MonPasswordSecurise123",
+  "password": "MySecurePassword123",
   "role": "ADMIN"
 }
 ```
 
-### Connexion
+### Login
 ```http
 POST /api/auth/login
 Content-Type: application/json
 
 {
   "email": "yann@example.com",
-  "password": "MonPasswordSecurise123"
+  "password": "MySecurePassword123"
 }
 ```
 
-### Réponse connexion
+### Login Response
 ```json
 {
   "accessToken": "eyJhbGciOiJIUzI1Ni...",
@@ -161,15 +160,15 @@ Content-Type: application/json
 }
 ```
 
-### Créer une tâche
+### Create a Task
 ```http
 POST /api/tasks
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 
 {
-  "title": "Implémenter l'API",
-  "description": "Créer les endpoints REST",
+  "title": "Implement the API",
+  "description": "Create REST endpoints",
   "status": "TO_DO",
   "priority": "HIGH",
   "dueDate": "2026-02-15T23:59:00",
@@ -178,7 +177,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 }
 ```
 
-### Rafraîchir le token
+### Refresh Token
 ```http
 POST /api/auth/refresh
 Content-Type: application/json
@@ -192,33 +191,33 @@ Content-Type: application/json
 
 ## Installation
 ```bash
-# Cloner le projet
-git clone <url-du-repo>
+# Clone the project
+git clone <repo-url>
 cd collaborative-task-manager-backend
 
-# Build (génère les classes MapStruct)
+# Build (generates MapStruct classes)
 mvn clean compile
 
-# Lancer les tests
+# Run tests
 mvn test
 
-# Exécuter le projet
+# Run the project
 mvn spring-boot:run
 ```
 
-API disponible à : `http://localhost:8080`
+API available at: `http://localhost:8080`
 
 ---
 
-## Console H2
+## H2 Console
 
-| Paramètre | Valeur |
+| Parameter | Value |
 |---|---|
 | URL | `http://localhost:8080/h2-console` |
 | JDBC URL | `jdbc:h2:mem:testdb` |
 | User | `sa` |
-| Password | *(vide)* |
+| Password | *(empty)* |
 
 ---
 
-*Projet personnel — public — pas de licence restrictive.*
+*Personal project — public — no restrictive license.*
